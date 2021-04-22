@@ -44,4 +44,4 @@ python3 predict.py --data_dir data/atis/ --model_path /assets/
 |Dataset        |acc |precsion|recall|f1|
 |-------------|------------|------------|---|---|
 |ATIS | 98.20      | 95.64     |95.88|95.76|
-|Snips| 96.33     | 93.14    |93.61|93.37|
+|Snips| 97.66     | 95.84   |96.59|96.22|
