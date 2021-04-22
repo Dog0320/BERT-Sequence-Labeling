@@ -27,7 +27,6 @@ def predict(model, data_raw, labels):
         output = output.argmax(dim=2)
         output = output.tolist()
         label_mask = label_mask.tolist()
-        # 一个函数　输入是output和label_mask，输出是preds
         out_label = align_predictions(output,label_mask,labels)
         preds = preds + out_label
         epoch_pbar.update(1)
