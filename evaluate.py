@@ -26,10 +26,8 @@ def evaluate(model, data_raw, id_to_label,mode='dev'):
         input_ids, segment_ids, input_mask, label_ids = batch
         with torch.no_grad():
             output = model(input_ids, segment_ids, input_mask)
-        output = output.view(-1,len(id_to_label))
-        output = output.argmax(dim=1)
+        output = output.argmax(dim=2)
         output = output.tolist()
-        label_ids = label_ids.view(-1)
         label_ids = label_ids.tolist()
         output,label_ids = align_predictions(output,label_ids,id_to_label)
 
@@ -51,10 +49,17 @@ def evaluate(model, data_raw, id_to_label,mode='dev'):
 def align_predictions(preds,label_ids,id_to_label):
     aligned_labels = []
     aligned_preds = []
+
     for p,l in zip(preds,label_ids):
-        if l != -100:
-            aligned_preds.append(id_to_label[p])
-            aligned_labels.append(id_to_label[l])
+        p_list = []
+        l_list = []
+        for p_i,l_i in zip(p,l):
+            if l_i != -100:
+                p_list.append(id_to_label[p_i])
+                l_list.append(id_to_label[l_i])
+        aligned_preds.append(p_list)
+        aligned_labels.append(l_list)
+
     return aligned_preds,aligned_labels
 
 def set_seed(seed: int):

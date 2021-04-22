@@ -90,7 +90,7 @@ def main(args):
         epoch_pbar.close()
         print('Epoch %d mean loss: %.3f' % (epoch + 1, np.mean(batch_loss)))
         res = evaluate(model,dev_data_raw, labels)
-        if res['f1'] > best_score:
+        if res['f1'] >= best_score:
             best_score = res['f1']
             save_path = os.path.join(args.save_dir, 'model_best.bin')
             torch.save(model.state_dict(), save_path)
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     parser.add_argument("--max_seq_len", default=60, type=int)
     parser.add_argument("--batch_size", default=32, type=int)
     parser.add_argument("--n_epochs", default=15, type=int)
-    parser.add_argument("--learning_rate", default=2e-5, type=float)
+    parser.add_argument("--learning_rate", default=5e-5, type=float)
     parser.add_argument("--warmup", default=0.1, type=float)
     parser.add_argument("--dropout", default=0.1, type=float)
     args = parser.parse_args()

@@ -16,8 +16,8 @@ class Model(BertPreTrainedModel):
     def forward(self, input_ids, token_type_ids, attention_mask):
         bert_outputs = self.bert(input_ids=input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
         sequence_output, pooled_output = bert_outputs[:2]
-        sequence_output = self.dropout(sequence_output)
-        
-        output = self.classifier(sequence_output)
+
+        output = self.dropout(sequence_output)
+        output = self.classifier(output)
 
         return output

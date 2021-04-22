@@ -48,14 +48,15 @@ class SfProcessor(DataProcessor):
 
             guid = "%s-%s" % (set_type, i)
             words = line[0][4:].strip()
-            labels = None if set_type == "predict" else out[0].strip().split(' ')[1:]
+
+            labels = None if set_type == "predict" else out[0].strip().split()[1:]
             examples.append(InputExample(guid=guid, words=words,  labels=labels))
 
         return examples
 
 class TrainingInstance:
     def __init__(self,example,max_seq_len):
-        self.words = example.words.split(' ')
+        self.words = example.words.split()
         self.labels = example.labels
         self.max_seq_len = max_seq_len
 
@@ -85,6 +86,7 @@ class TrainingInstance:
         self.segment_id = [0] * len(self.input_ids)
         self.input_mask = [1] * len(self.input_ids)
         padding_length = self.max_seq_len-len(self.input_ids)
+
         if padding_length > 0:
             self.input_ids = self.input_ids + [0] * padding_length
             self.segment_id = self.segment_id + [0] * padding_length
@@ -113,6 +115,7 @@ class SequenceLabelingDataset(Dataset):
 def prepare_data(examples,max_seq_len,tokenizer,labels):
     label_map = {label:idx for idx,label in enumerate(labels)}
     data = []
+
     for example in examples:
         instance = TrainingInstance(example,max_seq_len)
         instance.make_instance(tokenizer,label_map)
